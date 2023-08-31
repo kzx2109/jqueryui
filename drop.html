@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Sortable List Example</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+  <style>
+    #arealist,
+    #area2,
+    #area3 {
+      border: 1px solid #ccc;
+      width: 200px;
+      height: 200px;
+      margin: 10px;
+      padding: 10px;
+      float: left;
+    }
+
+    .item {
+      border: 1px solid #ccc;
+      background-color: #f7f7f7;
+      padding: 5px;
+      margin: 5px;
+      cursor: move;
+    }
+
+    .item:hover {
+      background-color: #eee;
+    }
+
+    .cross {
+      float: right;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <input type="text" id="count">
+  <div id="arealist" class="connectedSortable">
+    <div class="item" id="1">Item 1</div>
+    <div class="item" id="2">Item 2</div>
+    <div class="item" id="3">Item 3</div>
+    <div class="item" id="4">Item 4</div>
+    <div class="item" id="5">Item 5</div>
+    <div class="item" id="6">Item 6</div>
+    <div class="item" id="7">Item 7</div>
+    <div class="item" id="8">Item 8</div>
+    <div class="item" id="9">Item 9</div>
+    <div class="item" id="10">Item 10</div>
+  </div>
+  <div id="area2" class="connectedSortable"></div>
+  <div id="area3" class="connectedSortable"></div>
+  <script>
+    $(document).ready(function () {
+      // sortable list
+      var startBox, endBox;
+      var count = 0;
+      $('#arealist, #area2, #area3').sortable({
+        connectWith: '.connectedSortable',
+        helper: 'clone',//允許使用輔助元素來拖動顯示
+        start: function (event, ui) {
+          startBox = ui.item.parent().attr('id')
+          console.log(startBox);
+        },
+        stop: function (event, ui) {
+
+          if ($(ui.item).hasClass('item')) {
+            // create a clone when moved to another area
+            $(this).append(ui.item.clone());
+            endBox = ui.item.parent().attr('id');
+            console.log(endBox);
+            if ((endBox == 'area2' || endBox == "area3") && endBox != startBox) {
+              count++
+              $('#count').val(count)
+            }
+          }
+        }
+      }).disableSelection();
+    });
+  </script>
+</body>
+
+</html>
